@@ -19,10 +19,11 @@ public class CheckGymCodeController implements HealthController {
 		ModelAndView mv = new ModelAndView();
 		String id =session.getAttribute("curUserId").toString();
 		String type =session.getAttribute("curUserType").toString();
-		
+
 		if(type.equals("1") || type.equals("")) {
 			request.setAttribute("errCode", "4");
 			throw new SQLException();
+
 		}else {
 		MemberDTO member=  HealthService.selectMemberById(id);
 			int gymCode=member.getGymCode();

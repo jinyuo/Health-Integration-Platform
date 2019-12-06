@@ -13,6 +13,7 @@ import mind.model.dto.MemberDTO;
 import mind.service.HealthService;
 import mind.util.PwUtil;
 
+
 public class MemberInsertController implements HealthController {
 
 	@Override
@@ -35,16 +36,10 @@ public class MemberInsertController implements HealthController {
 		HealthService.insertMember(member);
 		ModelAndView mv = new ModelAndView();
 		
-		int result = HealthService.insertMember(member);
-		if (result == 0) {
-			request.setAttribute("errCode", "7");
 		
-		} else {
-
-			
-			mv.setViewName("index-5.html");
-			mv.setRedirect(true);
-		}
+		mv.setViewName("index-5.html");
+		mv.setRedirect(true);
+		
 		return mv;
 	}
 
