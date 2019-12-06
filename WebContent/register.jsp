@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -33,9 +36,94 @@
         <link rel="stylesheet" href="assets/css/owl.transitions.css">
         <link rel="stylesheet" href="assets/css/style.css">
         <link rel="stylesheet" href="assets/css/responsive.css">
+        
+        <script src="js/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript">
+        
+		$(function(){
+			$("#login").click(function(){
+				if($(this).text() == "Login"){
+					alert($(this).text())
+            		location.href="register.jsp";
+            	} else {
+            		alert($(this).text());
+            		location.href="front?command=login";
+            	}
+			}); 	
+		});
+        	
+		
+        </script>
+       
+        <script src="js/jquery-3.4.1.min.js"></script> 
+        <script type="text/javascript">
+        
+  	function checkValid(){
+		 if($("#memberId").val()==""){
+			alert("아이디를 입력하세요.")
+			 $("#memberId").focus();
+			 return false;
+		 }
+		 if($("#memberPassword").val()==""){
+			alert("비밀번호를 입력하세요.")
+			  $("#memberId").focus();
+			 return false;
+		 }
+		 if($("#name").val()==""){
+				alert("이름을 입력하세요.")
+				  $("#name").focus();
+			 return false;
+		 }
+		 if($("#phone").val()==""){
+				alert("전화번호를 입력하세요.")
+				  $("#phone").focus();
+			 return false;
+		 }
+	
+	 }// 빈칸 유효성 체크 끝
+	 
+        
+	     $(function(){
+	    	
+        	//아이디 중복 체크
+        	$("#memberId").keyup(function(){
+        		if($(this).val()==""){
+        			$("#span").text("   ");
+        			return;
+        		}
+        		 $.ajax({
+       			  type:"post",
+       			  url:"idCheckServlet",
+       		      dataType: "text",//서버에게 받은 응답결과 type(text, xml, html, json)
+       		      data : {memberId: $(this).val() } ,//서버에게 전송할 parameter
+       		      success: function(result){
+       		    	  $("#span").html(result);
+       		      } ,
+       		      error : function(err){
+       		    	  console.log(err+"=> 오류발생");
+       		      }
+       		  });//ajax끝
+       	  });//keyup끝
+        	  
+     		
+ //////////////////////////////////////////////////////////////////////////////////////////////////////
+ 
+			$("#join").click(function(){
+
+				if($("#check").is(":checked")){ //사업자 인지 체크
+					$("#memberCheck").val(-1);  //사업자 회원(사업장 등록 가능)
+					
+					
+        		}else{
+        			$("#memberCheck").val(0);  //일반 회원
+        		}	
+			});
+		
+        });
+      
+        </script>
     </head>
     <body>
-
         <div id="preloader">
             <div id="status">&nbsp;</div>
         </div>
@@ -58,7 +146,9 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse yamm" id="navigation">
                     <div class="button navbar-right">
-                        <button class="navbar-btn nav-button wow bounceInRight login" onclick=" window.open('register.html')" data-wow-delay="0.4s">로그인/회원가입</button>
+                    	<script type="text/javascript">alert(${curUserType});</script> 
+                        <button id="login" class="navbar-btn nav-button wow bounceInRight login" data-wow-delay="0.4s"><c:choose><c:when test="${curUserType eq '0'}" >Login</c:when><c:otherwise>Logout</c:otherwise></c:choose></button>
+                        <button class="navbar-btn nav-button wow fadeInRight" onclick=" window.open('submit-property.html')" data-wow-delay="0.5s">Submit</button>
                     </div>
                     <ul class="main-nav nav navbar-nav navbar-right">
                         <li class="dropdown ymm-sw " data-wow-delay="0.1s">
@@ -69,7 +159,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">포인트 충전 </a>
                         </li>
 
-                        <li class="wow fadeInDown" data-wow-delay="0.4s"><a href="contact.html">서비스 소개</a></li>
+                        <li class="wow fadeInDown" data-wow-delay="0.4s"><a href="contact.html">Contact</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -87,7 +177,6 @@
         </div>
         <!-- End page header -->
  
-
         <!-- register-area -->
         <div class="register-area" style="background-color: rgb(249, 249, 249);">
             <div class="container">
@@ -96,21 +185,34 @@
                     <div class="box-for overflow">
                         <div class="col-md-12 col-xs-12 register-blocks">
                             <h2>회원가입 : </h2> 
-                            <form action="" method="post">
+                            <form name = "insertForm"action="front?command=memberInsert" method="post" onSubmit="return checkValid()">
                                 <div class="form-group">
-                                    <label for="name">이름</label>
-                                    <input type="text" class="form-control" id="name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">이메일</label>
-                                    <input type="text" class="form-control" id="email">
+                                    <label for="name">아이디</label>
+                                    <input type="text" class="form-control" id="memberId" name="memberId" autocomplete="off">
+                                    <span id="span">아이디 중복 체크</span>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">비밀번호</label>
-                                    <input type="password" class="form-control" id="password">
+                                    <input type="password" class="form-control" id="memberPassword" name="memberPassword">
                                 </div>
+                                <div class="form-group">
+                                    <label for="name">이름</label>
+                                    <input type="text" class="form-control" id="name" name="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">전화번호</label>
+                                    <input type="text" class="form-control" id="phone" name="phone">
+                                </div>
+                                <div class="form-group">
+                                    <label>사업자 여부</label>
+                                    <input type="checkbox" name ="check" id="check">체크시 사업자 등록가능
+									<input type="hidden" class="form-control" name ="memberCheck" id= "memberCheck">
+                                </div>
+                        
+                                
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-default">가입하기</button>
+                                    <button type="submit" class="btn btn-default" id="join">가입하기</button>
+                                   
                                 </div>
                             </form>
                         </div>
@@ -121,14 +223,14 @@
                     <div class="box-for overflow">                         
                         <div class="col-md-12 col-xs-12 login-blocks">
                             <h2>로그인 : </h2> 
-                            <form action="" method="post">
+                             <form action="front?command=login" method="post">
                                 <div class="form-group">
-                                    <label for="email">이메일</label>
-                                    <input type="text" class="form-control" id="email">
+                                    <label for="id">아이디</label>
+                                    <input type="text" class="form-control" name="id">
                                 </div>
                                 <div class="form-group">
                                     <label for="password">비밀번호</label>
-                                    <input type="password" class="form-control" id="password">
+                                    <input type="password" class="form-control" name="password">
                                 </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-default"> 로그인</button>
@@ -138,12 +240,13 @@
                             
                             <h2>소셜 로그인 :  </h2> 
                             
+                            
                             <p>
                             <a class="login-social" href="#"><i class="fa fa-facebook"></i>&nbsp;Facebook</a> 
                             <a class="login-social" href="#"><i class="fa fa-google-plus"></i>&nbsp;Gmail</a> 
                             <a class="login-social" href="#"><i class="fa fa-twitter"></i>&nbsp;Twitter</a>  
                             </p> 
-                        </div>
+                      </div>
                         
                     </div>
                 </div>

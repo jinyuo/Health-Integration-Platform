@@ -21,22 +21,30 @@ public class MemberDTO {
 	public MemberDTO(String id, String pwd, String name, String phoneNum, int gymCode/*, int balance*/) {
 		super();
 		this.id = id;
-		this.pwd = pwd;
 		this.name = name;
+		this.pwd = pwd;
 		this.phoneNum = phoneNum;
 		this.gymCode = gymCode;
 		/*this.balance = balance;*/
 	}
 
-
+ 
 	/**
 	 * 헬스장 코드가 없는 MemberDTO생성자 아마 일반 유저가 사용할 듯ㅋㅋ
 	 * */
-	public MemberDTO(String id, String pwd, String name, String phoneNum) {
+	public MemberDTO(String id, String name, String pwd, String phoneNum) {
+		this(id,pwd,phoneNum);
+		this.name = name;
+
+	}
+	
+	/**
+	 * 회원 정보 수정을 위한 MemberDTO생성자
+	 */
+	public MemberDTO(String id, String pwd, String phoneNum) {
 		super();
 		this.id = id;
-		this.name = pwd;
-		this.pwd = name;
+		this.pwd = pwd;
 		this.phoneNum = phoneNum;
 	}
 	

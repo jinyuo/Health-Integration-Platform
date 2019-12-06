@@ -29,7 +29,7 @@ public interface HealthDAO {
 	/**
 	 * 회원 정보 수정
 	 * */
-	int updateMember(MemberDTO member) throws SQLException;
+	int updateMember(MemberDTO member,String type) throws SQLException;
 	
 	/**
 	 * 회원탈퇴(유저 삭제)
@@ -41,6 +41,11 @@ public interface HealthDAO {
 	 * @return 중복이면 true 아니면 false
 	 * */
 	boolean duplicateById(String id) throws SQLException;
+	
+	/**
+	 * GymCode 업데이트
+	 */
+	
 	
 	//////////////////////////////////////////////////////////////////////////
 	
@@ -69,7 +74,7 @@ public interface HealthDAO {
 	/**
 	 * 헬스장 등록
 	 * */
-	int insertGym(GymDTO gym) throws SQLException;
+	int insertGym(GymDTO gym,String id) throws SQLException;
 	
 	/**
 	 * 모든 헬스장 검색

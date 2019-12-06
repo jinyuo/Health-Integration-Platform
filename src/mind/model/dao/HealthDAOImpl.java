@@ -112,19 +112,28 @@ public class HealthDAOImpl implements HealthDAO {
 	}
 
 	@Override
-	public int updateMember(MemberDTO member) throws SQLException {
+	public int updateMember(MemberDTO member, String type) throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		String sql = proFile.getProperty("member.update");
+
 		int result = 0;
 		
 		try {
 			con = DbUtil.getConnection();
-			ps = con.prepareStatement(sql);
-			ps.setString(1, member.getPwd());
-			ps.setString(2, member.getPhoneNum());
-			ps.setString(3, member.getId());
 			
+			
+			if(type.equals("1")) {
+				sql = String.format(sql,"PWD");
+				ps = con.prepareStatement(sql);
+				ps.setString(1,member.getPwd());
+			}
+			else {
+				sql = String.format(sql,"PHONE_NUM");
+				ps = con.prepareStatement(sql);
+				ps.setString(1,member.getPhoneNum());
+			}
+			ps.setString(2, member.getId());
 			result = ps.executeUpdate();
 		} finally {
 			DbUtil.dbClose(ps, con);
@@ -290,7 +299,7 @@ public class HealthDAOImpl implements HealthDAO {
 	}
 
 	@Override
-	public int insertGym(GymDTO gym) throws SQLException {
+	public int insertGym(GymDTO gym,String id) throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		String sql = proFile.getProperty("gym.insert");
@@ -311,9 +320,20 @@ public class HealthDAOImpl implements HealthDAO {
 			ps.setString(9, gym.getWeekendHour());
 			
 			result = ps.executeUpdate();
-		} finally {
-			DbUtil.dbClose(ps, con);
+			
+			if(result==0) throw new SQLException();
+			
+			//현재 GymCode구하기
+			sql = proFile.getProperty("member.updateGymCode");
+			ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			
+			result = ps.executeUpdate();
+			
+		}finally {
+			DbUtil.dbClose(ps, con);;
 		}
+		
 		return result;
 	}
 
@@ -460,6 +480,8 @@ public class HealthDAOImpl implements HealthDAO {
 		}
 		return result;
 	}
+	
+	
 
 	@Override
 	public List<ReviewDTO> selectReviewByGymCode(int gymCode) throws SQLException {
@@ -670,6 +692,8 @@ public class HealthDAOImpl implements HealthDAO {
 		}
 		return result;
 	}
+
+	
 
 	
 
