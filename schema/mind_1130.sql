@@ -241,5 +241,10 @@ UPDATE USE_DETAIL SET STATE = CASE
                                 WHEN SYSDATE - TO_DATE(USE_START_HOUR) > 1.0 THEN -1
                                 ELSE 1
                                 END;
+    
+--사업자 gymCode 갱신
+update member
+set gym_code = (select LAST_NUMBER from user_sequences
+where SEQUENCE_NAME = 'GYM_CODE_SEQ') where id = 'AAA';
 
 COMMIT

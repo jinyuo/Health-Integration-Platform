@@ -3,6 +3,8 @@ package mind.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+
 import mind.model.dao.HealthDAO;
 import mind.model.dao.HealthDAOImpl;
 import mind.model.dto.GymDTO;
@@ -38,7 +40,9 @@ public class HealthService {
 		int result = 0;
 		
 		if(healthDAO.duplicateById(member.getId()))
+	
 			throw new SQLException("사용 중인 아이디입니다.");
+		
 		else 
 			result = healthDAO.insertMember(member);
 		return result;

@@ -11,6 +11,7 @@ import mind.model.dao.HealthDAO;
 import mind.model.dao.HealthDAOImpl;
 import mind.model.dto.MemberDTO;
 import mind.service.HealthService;
+import oracle.net.aso.i;
 
 public class MemberInsertController implements HealthController {
 
@@ -28,17 +29,23 @@ public class MemberInsertController implements HealthController {
 		
 	
 		System.out.println(gymCode +"******");
+		
+		
+		
+		
 		MemberDTO member = new MemberDTO(id,pwd,name,phoneNum,gymCode);
-		
-		HealthService.insertMember(member);
-		
 		ModelAndView mv = new ModelAndView();
 		
+		int result = HealthService.insertMember(member);
+		if (result == 0) {
+			request.setAttribute("errCode", "7");
 		
-		
-		mv.setViewName("index-5.html");
-		mv.setRedirect(true);
-		
+		} else {
+
+			
+			mv.setViewName("index-5.html");
+			mv.setRedirect(true);
+		}
 		return mv;
 	}
 

@@ -21,7 +21,7 @@ public class CheckGymCodeController implements HealthController {
 		
 		String id =session.getAttribute("curUserId").toString();
 		String type =session.getAttribute("curUserType").toString();
-		if(type.equals("1") || type.equals("")) {
+		if(type.equals("1") || type.equals("")) { //1번은 회원 2번이 사업자 0번이 비회원
 			request.setAttribute("errCode", "5");
 			new SQLException();
 		}else {
