@@ -34,7 +34,8 @@ public class PwUtil {
 	// Properties에 있는 값과 SHA-256 암호화시킨 입력값을 비교해서 boolean값 반환
 	
 	public boolean PWCheck(String inputPwd,String pwd) {
-		if (Encryption(inputPwd).toUpperCase().equals(pwd.toUpperCase())) {
+
+		if (Encryption(inputPwd).toUpperCase().equals(pwd)) {
 			return true;
 		}
 		return false;
